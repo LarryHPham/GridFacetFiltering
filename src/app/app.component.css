@@ -1,0 +1,103 @@
+.gff-container {
+  height: 100%;
+  border: 1px solid #000000;
+  background-color: #1C212A;
+  color: #ffffff;
+}
+
+.gff-container h1 {}
+
+.filters {
+  margin-bottom: 15px;
+}
+
+.filters-display {
+  padding: 10px;
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+.filters-item {
+  font-size: 1.2rem;
+  height: 1.7em;
+  min-width: 5em;
+  text-align: center;
+  margin: 5px;
+  position: relative;
+  border: 1px solid #000000;
+  border-radius: 10px;
+}
+
+.filters-item div {
+  height: 100%;
+  padding-left: 1.5625em;
+  padding-right: 1.5625em;
+}
+
+.filters-item .fa-close {
+  font-size: 1rem;
+  position: absolute;
+  right: .5em;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.gff-logo {
+  height: 100px;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid #000000;
+}
+
+.gff-logo-image {
+  width: 100%;
+  padding-left: 10px;
+  padding-right: 10px;
+  position: absolute;
+  vertical-align: top;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.gff-box {
+  min-height: 300px;
+  /* border: 1px solid #000000; */
+}
+
+.facet-content{
+    margin-bottom: 15px;
+}
+
+.facet-filters {
+  padding-top: 15px;
+  padding-left: 15px;
+  padding-right: 15px;
+  border: 1px solid #000000;
+}
+
+.facets {
+  color: #F7F7F8;
+}
+
+.facets-category {
+  font-size: 1.2em;
+}
+
+.facets-category label {
+  display: block;
+  margin: 10px 0;
+  line-height: 1.2;
+  cursor: pointer;
+  user-select: none;
+}
+
+.facets-group label:hover {
+  color: #0095CD;
+}
+
+.facets-group input[type=checkbox] {
+  position: relative;
+  top: 1.5px;
+}
