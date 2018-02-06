@@ -18,62 +18,25 @@
   </div>
   <div class="row no-gutters facet-content">
     <aside class="facet-filters gff-box col-md-3">
-      <div class="facets">
-        <section class="facets-category">
-          <h4>Parent</h4>
-          <div>
-            <label><input type="checkbox" /> Item1</label>
-          </div>
-          <div>
-            <label><input type="checkbox" /> Item2</label>
-          </div>
-          <div>
-            <label><input type="checkbox" /> Item3</label>
-          </div>
-        </section>
-      </div>
+      <category-filters *ngIf="categoryFilters" [filters]="categoryFilters" (filterCheckBox)="filterCheck($event)"></category-filters>
     </aside>
-    <div class="col-md-9 list-container">
-      <div class="item-container">
-        <div class="item">
-          <div class="item-img">
-            1
-          </div>
-          <div class="item-content">
-            [DATA]
-          </div>
-        </div>
-      </div>
-      <div class="item-container">
-        <div class="item">
-          <div class="item-img">
-            2
-          </div>
-          <div class="item-content">
-            [DATA]
+    <div *ngIf="displayItems" class="col-md-9 list-container">
+
+      <div class="list-container-scroll">
+        <div *ngFor="let item of displayItems; let i=index" class="item-container">
+          <div class="item">
+            <div class="item-img">
+              {{i}}
+            </div>
+            <div class="item-content">{{item.name}}</div>
+            <div class="item-content">{{item.mpg}}mpg</div>
+            <div class="item-content">{{item.lbs}}lbs</div>
+            <div class="item-content">{{item.acc}}acc</div>
+            <div class="item-content">{{item.year}}year</div>
           </div>
         </div>
       </div>
-      <div class="item-container">
-        <div class="item">
-          <div class="item-img">
-            3
-          </div>
-          <div class="item-content">
-            [DATA]
-          </div>
-        </div>
-      </div>
-      <div class="item-container">
-        <div class="item">
-          <div class="item-img">
-            4
-          </div>
-          <div class="item-content">
-            [DATA]
-          </div>
-        </div>
-      </div>
+
     </div>
   </div>
 </div>
