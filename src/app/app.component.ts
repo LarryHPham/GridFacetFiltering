@@ -14,20 +14,21 @@ export class AppComponent {
   constructor(
     private _facetFilterService: FacetFilterService
   ){
-    console.log("CONSTRUCTOR");
     _facetFilterService.get("https://raw.githubusercontent.com/curran/data/gh-pages/datalibExamples/cars.json")
     .subscribe(data => {
-      console.log(data);
-      this.categoryFilters = data.Filters;
+      this.categoryFilters = data.filters;
       this.displayItems = data.rawData;
     });
   }
 
-  ngOnInit(){
+  filterCheck(event){
+    let newFilters = this._facetFilterService.filterData(event.value, event.checked);
+    this.displayItems = newFilters.newDisplay;
+    let newCatData = this.categoryFilters.filter(cat => cat.type === event.name);
+
+    if(newCatData.length > 0){
+      newCatData[0].data = newFilters.newCategories;
+    }
   }
 
-  filterCheck(event){
-    console.log(event);
-  }
-  
 }

@@ -16,27 +16,29 @@ export interface filtersList {
 export class FacetFilterService {
   serviceData: any;
   filterCategories: Array<filtersList> = [];
-
+  activeFilters: Array<string> = [];
+  displayItems: Array<any> = [];
+  unDisplayedItems: Array<any> = [];
 
   constructor(private _http: HttpClient, ) {
-    console.log("facet-filter SERVICE");
   }
 
   get(url: string) {
-    console.log("GET URL => " + url);
     return this._http.get(url)
       .pipe(
       map(res => {
         // set the raw json data as service Data to be pulled for filtering
         this.serviceData = res;
 
+        //displayItems is the data to be manipulated that are displayed on client frontend
+        this.displayItems = res;
         // create all filterable categories with provided data
-        console.log("map");
         this.createBrandFilter(res);
-        // console.log(this.filterCategories);
+
+        //return data
         return {
           rawData: res,
-          Filters: [
+          filters: [
             {
               type: "Brand",
               data: this.filterCategories
@@ -51,23 +53,7 @@ export class FacetFilterService {
       );
   }
 
-  transform(data: any) {
-    console.log("TRANSFORM DATA ARRAY");
-    // console.log(this.filterCategories);
-    data.forEach(function(value, i) {
-      // console.log(i, value);
-      var filterSplit = value.name.split(' ');
-      // console.log(filterSplit[0]);
-      // this.filterCategories = data.filter(filter => filter.name === filterSplit[0]);
-      // console.log("TRANSFORM =>" + filterSplit[0]);
-      // console.log(this.filterCategories);
-    })
-
-    return data;
-  }
-
   createBrandFilter(data: any) {
-    let self = this;
     // create skeleton of dataSet filter
     // only to create filter list with dummy data
     var dataSet: Array<filtersList> = [];
@@ -79,12 +65,10 @@ export class FacetFilterService {
         var name = brandName[0];
 
         // filter the list => dataSet to find if there are any currently existing filters if so increase it's Count
-        var nameFilter = (dataSet.filter(item => item.filterName === self.toTitleCase(name)));
-        if (nameFilter.length > 0) {
-          nameFilter[0].filterCount++;
-        } else {
+        var nameFilter = (dataSet.filter(item => item.filterName === name));
+        if (nameFilter.length == 0) {
           dataSet.push({
-            filterName: self.toTitleCase(name),
+            filterName: name,
             filterCount: 1,
             filterActive: false,
           });
@@ -92,19 +76,59 @@ export class FacetFilterService {
       }
     });
 
+    //update the count for each since their names can be located elsewhere in string
+    dataSet.forEach(function(filter, i){
+      filter.filterCount = data.filter(i => i.name.includes(filter.filterName)).length;
+    })
+
     // set filterCategories to derived dataSet
     this.filterCategories = dataSet;
   }
 
-
-  //Capitalizes first letter of string (Global)
-  toTitleCase(str: string): string {
-    if (str === undefined || str === null) {
-      return str;
+  filterData(filter, filterAdd){
+    var self = this;
+    // filter data will add or remove the filter from the active Filters array
+    if(filterAdd){
+      this.activeFilters.push(filter);
+    }else{
+      this.activeFilters = this.activeFilters.filter(e => e !== filter);
     }
-    return str.replace(/\w\S*/g, function(txt) {
-      return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+
+    //reset unDisplayedItems to an empty array
+    this.unDisplayedItems = [];
+
+    // Use full service Data to ensure that every piece of data is checked to test against current filtersList
+    // NOTE: depending on task this may not be the most optimal solution due to the fact it will always iterate through entire service Data
+    this.displayItems = this.serviceData.filter(function(item){
+      for(var w = 0; w < self.activeFilters.length;w++){
+        // use includes() instead of indexOf() bc we want the whole word to be checked on not each character
+        if(item.name.includes(self.activeFilters[w])){
+          return item;
+        }
+      }
+
+      // push item if it reaches this point
+      self.unDisplayedItems.push(item);
     });
-  };
+
+
+    // incase all filters are removed then set back to original data
+    if(this.displayItems.length == 0){
+      this.displayItems = this.serviceData;
+      this.unDisplayedItems = this.serviceData;
+    }
+
+
+    // update Count of all items again
+    this.filterCategories.forEach(function(filter, i){
+      filter.filterCount = self.unDisplayedItems.filter(i => i.name.includes(filter.filterName)).length;
+    });
+
+    //return data
+    return {
+      newDisplay: this.displayItems,
+      newCategories: this.filterCategories
+    };
+  }
 
 }

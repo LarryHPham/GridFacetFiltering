@@ -1,15 +1,15 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
-  selector: 'category-filters',
-  templateUrl: './category-filters.component.html',
-  styleUrls: ['./category-filters.component.css']
+  selector: 'filter-box',
+  templateUrl: './filter-box.component.html',
+  styleUrls: ['./filter-box.component.css']
 })
-export class CategoryFiltersComponent implements OnInit {
+export class FilterBoxComponent implements OnInit {
   @Input() filters:any;
   @Output() filterCheckBox: EventEmitter<any> = new EventEmitter();
 
-  constructor() { }
+  constructor() {}
 
   ngOnInit() {
   }
@@ -21,5 +21,4 @@ export class CategoryFiltersComponent implements OnInit {
       name: event.target.name
     });
   }
-
 }
