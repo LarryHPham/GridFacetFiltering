@@ -17,7 +17,7 @@ export class FacetFilterService {
   serviceData: any;
   filterCategories: Array<filtersList> = [];
   activeFilters: Array<string> = [];
-  displayItems: Array<any> = [];
+  displayItems: any = [];
   unDisplayedItems: Array<any> = [];
 
   constructor(private _http: HttpClient, ) {
